@@ -149,53 +149,70 @@ export default function GameLayout() {
   }
 
   return (
-    <div className="container mt-4">
-      <div className="row">
+    <div className="wordle-wrapper">
+      <div className="wordle-container">
 
-        {/* ------------------ LEFT: HOW TO PLAY ------------------ */}
-        <div className="col-md-4">
-          <div className="how-card p-3 shadow rounded">
-            <h4 className="mb-3">How to Play</h4>
-            <p>Guess the hidden 5-letter word in 6 tries.</p>
+        {/* ------------------ LEFT: GAME BOARD ------------------ */}
+        <div className="board-section">
+          <h1 className="wordle-title">WORDLE</h1>
+          {message && <div className="message-toast">{message}</div>}
+          <Board guesses={guesses} currentGuess={currentGuess} solution={solution} />
+          {gameStatus !== "playing" && (
+            <button className="btn-restart" onClick={resetGame}>Play Again</button>
+          )}
+        </div>
+
+        {/* ------------------ RIGHT: HOW TO PLAY ------------------ */}
+        <div className="instructions-panel">
+          <h2 className="instructions-title">How To Play</h2>
+          <p className="instructions-subtitle">Guess The Wordle In 6 Tries</p>
+
+          <div className="rules-section">
+            <ul className="rules-list">
+              <li>Each guess must be a valid 5-letter word.</li>
+              <li>The color of the tiles will change to show how close your guess was to the word.</li>
+            </ul>
+          </div>
+
+          <div className="examples-section">
+            <h3 className="examples-title">Examples</h3>
 
             {/* GREEN EXAMPLE */}
-            <div className="d-flex align-items-center mb-2">
-              <div className="tile correct">C</div>
-              <div className="tile">L</div>
-              <div className="tile">O</div>
-              <div className="tile">C</div>
-              <div className="tile">K</div>
-              <small className="ms-2">Green = Correct letter & position</small>
+            <div className="example-item">
+              <div className="example-row">
+                <div className="tile correct">C</div>
+                <div className="tile">L</div>
+                <div className="tile">O</div>
+                <div className="tile">C</div>
+                <div className="tile">K</div>
+              </div>
+              <p className="example-text"><strong>C</strong> is in the word and in the correct spot.</p>
+            </div>
+
+            {/* YELLOW EXAMPLE */}
+            <div className="example-item">
+              <div className="example-row">
+                <div className="tile">A</div>
+                <div className="tile">R</div>
+                <div className="tile almost">E</div>
+                <div className="tile">A</div>
+                <div className="tile">S</div>
+              </div>
+              <p className="example-text"><strong>E</strong> is in the word but in the wrong spot.</p>
             </div>
 
             {/* GRAY EXAMPLE */}
-            <div className="d-flex align-items-center mb-2">
-              <div className="tile">V</div>
-              <div className="tile">A</div>
-              <div className="tile">G</div>
-              <div className="tile wrong">U</div>
-              <div className="tile">E</div>
-              <small className="ms-2">Gray = Letter not in word</small>
+            <div className="example-item">
+              <div className="example-row">
+                <div className="tile">V</div>
+                <div className="tile">A</div>
+                <div className="tile">G</div>
+                <div className="tile wrong">U</div>
+                <div className="tile">E</div>
+              </div>
+              <p className="example-text"><strong>U</strong> is not in the word in any spot.</p>
             </div>
-
-            {/* ORANGE/YELLOW EXAMPLE */}
-            <div className="d-flex align-items-center mb-2">
-              <div className="tile">A</div>
-              <div className="tile almost">R</div>
-              <div className="tile">E</div>
-              <div className="tile">A</div>
-              <div className="tile">S</div>
-              <small className="ms-2">Orange = Letter exists but wrong spot</small>
-            </div>
-
           </div>
-        </div>
-
-        {/* ------------------ RIGHT: GAME BOARD ------------------ */}
-        <div className="col-md-8 text-center">
-          <h2 className="mb-3">Wordle Clone</h2>
-          <Board guesses={guesses} currentGuess={currentGuess} solution={solution} />
-          <button className="btn btn-warning mt-3" onClick={resetGame}>Restart Game</button>
         </div>
       </div>
 
@@ -203,8 +220,8 @@ export default function GameLayout() {
       {gameStatus !== "playing" && overlayVisible && (
         <div className="result-overlay">
           <div className="result-card">
-            <h3>{gameStatus === "won" ? "You Won! 🎉" : "Game Over"}</h3>
-            <p>{gameStatus === "won" ? "Great job!" : `Correct word: ${solution}`}</p>
+            <h3>{gameStatus === "won" ? "You Won!" : "Game Over"}</h3>
+            <p>{gameStatus === "won" ? "Congratulations!" : `Correct word: ${solution}`}</p>
             <button className="btn btn-primary me-2" onClick={resetGame}>Play Again</button>
             <button className="btn btn-secondary" onClick={() => setOverlayVisible(false)}>Continue</button>
           </div>
